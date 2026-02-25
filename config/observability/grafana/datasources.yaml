@@ -20,6 +20,15 @@ datasources:
     editable: false
     apiVersion: 1
     uid: tempo
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: Loki
+        spanStartTimeShift: "-1m"
+        spanEndTimeShift: "1m"
+        filterByTraceID: true
+        filterBySpanID: false
+      lokiSearch:
+        datasourceUid: loki
   - name: Loki
     type: loki
     access: proxy
@@ -29,3 +38,11 @@ datasources:
     apiVersion: 1
     version: 1
     editable: false
+    jsonData:
+      derivedFields:
+        - datasourceUid: tempo
+          matcherType: label
+          matcherRegex: trace_id
+          name: TraceID
+          url: "$${__value.raw}"
+          urlDisplayLabel: "View Trace in Tempo"
