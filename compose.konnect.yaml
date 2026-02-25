@@ -29,7 +29,7 @@ services:
   catalogue:
     <<: *default
     build:
-      context: ./app/catalogue
+      context: ./apis/catalogue
     container_name: catalogue
     ports:
       - 3001:3001
