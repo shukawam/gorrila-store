@@ -22,6 +22,20 @@ services:
         paths:
           - /orders
         strip_path: false
+  - name: openai-service
+    url: https://example.com
+    routes:
+      - name: openai-route
+        paths:
+          - /v1
+        strip_path: true
+  - name: mcp-service
+    url: http://catalogue:3001
+    routes:
+      - name: mcp-route
+        paths:
+          - /mcp
+        strip_path: true
 
 plugins:
   - name: opentelemetry
@@ -37,3 +51,27 @@ plugins:
         enable_request_metrics: true
         enable_upstream_health_metrics: true
         enable_consumer_attribute: true
+  - name: ai-proxy-advanced
+    route: openai-route
+    config:
+      targets:
+        - route_type: llm/v1/chat
+          auth:
+            header_name: Authorization
+            header_value: Bearer ${{ env "DECK_OPENAI_API_KEY" }}
+          model:
+            provider: openai
+            name: gpt-4o-mini
+            options:
+              max_tokens: 2024
+              temperature: 1.0
+  - name: ai-mcp-proxy
+    route: mcp-route
+    config:
+      mode: conversion-listener
+      tools:
+        - description: Get all catalogue in Gorilla Store
+          method: GET
+          path: /catalogue
+          annotations:
+            title: Get all catalogue in Gorilla Store
