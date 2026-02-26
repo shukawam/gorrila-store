@@ -25,6 +25,7 @@ services:
       - catalogue
       - cart
       - order
+      - agent
 
   catalogue:
     <<: *default

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import CartPage from './CartPage';
+import AskAIDialog from './AskAIDialog';
 import './App.css';
 
 function ProductList({
@@ -8,14 +9,18 @@ function ProductList({
   handleAddToCart,
   cartItemCount,
 }) {
+  const [askAIOpen, setAskAIOpen] = useState(false);
+
   return (
     <>
       <header className="App-header">
         <h1>Gorilla Store</h1>
         <nav>
+          <button className="ask-ai-btn" onClick={() => setAskAIOpen(true)}>Ask AI</button>
           <Link to="/cart" className="cart-link">View Cart ({cartItemCount})</Link>
         </nav>
       </header>
+      {askAIOpen && <AskAIDialog onClose={() => setAskAIOpen(false)} />}
       <div className="product-list">
         {products.map((product) => (
           <div key={product.id} className="product">

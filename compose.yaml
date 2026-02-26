@@ -33,6 +33,7 @@ services:
       - catalogue
       - cart
       - order
+      - agent
 
   catalogue:
     <<: *default
@@ -66,6 +67,18 @@ services:
     environment:
       <<: *otel-env
       OTEL_SERVICE_NAME: order
+  
+  agent:
+    <<: *default
+    build:
+      context: ./agent
+    container_name: agent
+    ports:
+      - 3004:3004
+    environment:
+      OTEL_SERVICE_NAME: agent
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      GATEWAY_ENDPOINT: http://gateway:8000
 
   database:
     <<: *default
