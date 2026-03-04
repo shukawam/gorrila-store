@@ -20,9 +20,6 @@ const agentRequestSchema = z
 const app = new Hono();
 
 app
-  .get("/", (c) => {
-    return c.json({ message: "Hello world" });
-  })
   .post("/agent", zValidator("json", agentRequestSchema), async (c) => {
     const body = c.req.valid("json");
 

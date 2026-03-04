@@ -63,7 +63,7 @@ services:
   agent:
     <<: *default
     build:
-      context: ./agent
+      context: ./apis/agent
     container_name: agent
     ports:
       - 3004:3004
